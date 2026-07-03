@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تیم گراهام | کدنویسی حرفه‌ای - طراحی سایت - ربات روبیکا</title>
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --secondary: #06B6D4;
+            --accent: #F43F5E;
+            --gold: #FBBF24;
+            --dark: #030712;
+            --card: #0F0F1A;
+            --text: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, 'Vazirmatn', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* ============ ANIMATED BACKGROUND ============ */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Grid */
+        .grid-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        /* Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: orbFloat 12s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -150px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: -150px;
+            right: -80px;
+            animation-delay: -4s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent);
+            top: 40%;
+            left: 60%;
+            animation-delay: -8s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -30px) scale(1.1); }
+            50% { transform: translate(-25px, 25px) scale(0.9); }
+            75% { transform: translate(15px, 35px) scale(1.05); }
+        }
+
+        /* Stars */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: starTwinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 10px white; }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: particleRise 8s linear infinite;
+        }
+
+        @keyframes particleRise {
+            0% { transform: translateY(0) rotate(0deg) scale(0); opacity: 0; }
+            10% { transform: translateY(-10px) rotate(30deg) scale(1); opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-120vh) rotate(720deg) scale(0.3); opacity: 0; }
+        }
+
+        /* ============ MAIN BANNER ============ */
+        .banner-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 780px;
+            perspective: 1000px;
+        }
+
+        .banner {
+            background: var(--card);
+            border-radius: 30px;
+            padding: 55px 45px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            box-shadow: 
+                0 40px 80px rgba(0, 0, 0, 0.6),
+                0 0 120px rgba(124, 58, 237, 0.08),
+                0 0 200px rgba(6, 182, 212, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(30px);
+            position: relative;
+            overflow: hidden;
+            animation: bannerEntry 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes bannerEntry {
+            from {
+                opacity: 0;
+                transform: translateY(50px) rotateX(5deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        /* Shine effect */
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(124, 58, 237, 0.05) 45deg,
+                transparent 90deg,
+                rgba(6, 182, 212, 0.05) 135deg,
+                transparent 180deg,
+                rgba(244, 63, 94, 0.05) 225deg,
+                transparent 270deg,
+                rgba(251, 191, 36, 0.05) 315deg,
+                transparent 360deg
+            );
+            animation: shine 10s linear infinite;
+        }
+
+        @keyframes shine {
+            to { transform: rotate(360deg); }
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ============ TOP BADGE ============ */
+        .premium-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.2));
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            animation: badgeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.6), 0 0 60px rgba(6, 182, 212, 0.3); }
+        }
+
+        .premium-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: dotBlink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes dotBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* ============ LOGO / AVATAR ============ */
+        .logo-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px;
+        }
+
+        .logo-rings {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: calc(100% + 20px);
+            height: calc(100% + 20px);
+        }
+
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            animation: ringRotate 4s linear infinite;
+        }
+
+        .ring-1 {
+            width: 100%;
+            height: 100%;
+            border-top-color: var(--primary);
+            border-right-color: var(--primary);
+            animation-duration: 3s;
+        }
+
+        .ring-2 {
+            width: 88%;
+            height: 88%;
+            top: 6%;
+            left: 6%;
+            border-bottom-color: var(--secondary);
+            border-left-color: var(--secondary);
+            animation-duration: 5s;
+            animation-direction: reverse;
+        }
+
+        .ring-3 {
+            width: 76%;
+            height: 76%;
+            top: 12%;
+            left: 12%;
+            border-top-color: var(--accent);
+            border-left-color: var(--accent);
+            animation-duration: 4s;
+        }
+
+        @keyframes ringRotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: 
+                0 20px 50px rgba(124, 58, 237, 0.3),
+                inset 0 0 30px rgba(6, 182, 212, 0.2);
+            overflow: hidden;
+        }
+
+        .logo-circle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(124, 58, 237, 0.3), transparent 60%);
+        }
+
+        .logo-text {
+            position: relative;
+            z-index: 1;
+            font-size: 3.8rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(180deg, #F8FAFC 0%, #7C3AED 50%, #06B6D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoShine 3s ease-in-out infinite;
+        }
+
+        @keyframes logoShine {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 10px rgba(124, 58, 237, 0.5)); }
+            50% { filter: brightness(1.4) drop-shadow(0 0 25px rgba(6, 182, 212, 0.8)); }
+        }
+
+        /* ============ TEAM NAME ============ */
+        .team-name {
+            font-size: 3.2rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, 
+                #F8FAFC 0%, 
+                #C4B5FD 20%, 
+                #67E8F9 40%, 
+                #FDA4AF 60%, 
+                #FDE68A 80%, 
+                #F8FAFC 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: nameShimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes nameShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .team-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 25px;
+            letter-spacing: 1.5px;
+        }
+
+        /* ============ SKILLS ============ */
+        .skills-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .skill-pill {
+            padding: 12px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-pill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .skill-pill:hover::before {
+            left: 100%;
+        }
+
+        .skill-pill:hover {
+            transform: translateY(-5px);
+        }
+
+        .skill-pill.python {
+            background: rgba(55, 118, 171, 0.2);
+            border: 1.5px solid rgba(55, 118, 171, 0.5);
+            color: #FFD43B;
+            box-shadow: 0 5px 20px rgba(55, 118, 171, 0.2);
+        }
+
+        .skill-pill.python:hover {
+            box-shadow: 0 10px 30px rgba(55, 118, 171, 0.4);
+        }
+
+        .skill-pill.web {
+            background: rgba(228, 79, 38, 0.2);
+            border: 1.5px solid rgba(228, 79, 38, 0.5);
+            color: #FF6B35;
+            box-shadow: 0 5px 20px rgba(228, 79, 38, 0.2);
+        }
+
+        .skill-pill.web:hover {
+            box-shadow: 0 10px 30px rgba(228, 79, 38, 0.4);
+        }
+
+        .skill-pill.bot {
+            background: rgba(6, 182, 212, 0.2);
+            border: 1.5px solid rgba(6, 182, 212, 0.5);
+            color: #67E8F9;
+            box-shadow: 0 5px 20px rgba(6, 182, 212, 0.2);
+        }
+
+        .skill-pill.bot:hover {
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+        }
+
+        .skill-pill.rubika {
+            background: rgba(47, 200, 120, 0.2);
+            border: 1.5px solid rgba(47, 200, 120, 0.5);
+            color: #4ADE80;
+            box-shadow: 0 5px 20px rgba(47, 200, 120, 0.2);
+        }
+
+        .skill-pill.rubika:hover {
+            box-shadow: 0 10px 30px rgba(47, 200, 120, 0.4);
+        }
+
+        .skill-pill.fast {
+            background: rgba(244, 63, 94, 0.2);
+            border: 1.5px solid rgba(244, 63, 94, 0.5);
+            color: #FDA4AF;
+            box-shadow: 0 5px 20px rgba(244, 63, 94, 0.2);
+        }
+
+        .skill-pill.fast:hover {
+            box-shadow: 0 10px 30px rgba(244, 63, 94, 0.4);
+        }
+
+        .skill-pill.quality {
+            background: rgba(251, 191, 36, 0.2);
+            border: 1.5px solid rgba(251, 191, 36, 0.5);
+            color: #FDE68A;
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.2);
+        }
+
+        .skill-pill.quality:hover {
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
+        }
+
+        /* ============ SERVICES CARDS ============ */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 22px 18px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(124, 58, 237, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 50px rgba(124, 58, 237, 0.1);
+        }
+
+        .service-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .service-title {
+            font-weight: 800;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .service-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ============ PRICE BANNER ============ */
+        .price-strip {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(6, 182, 212, 0.1), rgba(244, 63, 94, 0.1));
+            border: 1px solid rgba(124, 58, 237, 0.25);
+            border-radius: 18px;
+            padding: 22px 25px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-strip::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 200%;
+            background: linear-gradient(180deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: stripSweep 3s ease-in-out infinite;
+        }
+
+        @keyframes stripSweep {
+            0% { transform: translateX(-200%) rotate(45deg); }
+            100% { transform: translateX(200%) rotate(45deg); }
+        }
+
+        .price-emoji {
+            font-size: 2.5rem;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .price-text {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--gold);
+            letter-spacing: 0.5px;
+        }
+
+        .price-highlight {
+            background: rgba(251, 191, 36, 0.2);
+            padding: 6px 16px;
+            border-radius: 50px;
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* ============ REVIEWS ============ */
+        .reviews-strip {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .review-chip {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .review-chip:hover {
+            border-color: rgba(251, 191, 36, 0.5);
+            background: rgba(251, 191, 36, 0.05);
+            transform: scale(1.05);
+        }
+
+        .review-stars {
+            color: var(--gold);
+            font-size: 0.9rem;
+        }
+
+        /* ============ BOTS SECTION ============ */
+        .bots-row {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .bot-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 18px 22px;
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .bot-card:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 15px 35px rgba(6, 182, 212, 0.15);
+            transform: translateY(-6px);
+        }
+
+        .bot-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .bot-name {
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .bot-id {
+            font-family: 'Courier New', monospace;
+            color: var(--secondary);
+            font-size: 0.85rem;
+            direction: ltr;
+            letter-spacing: 1px;
+        }
+
+        /* ============ CONTACT SECTION ============ */
+        .contact-section {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 30px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-contact:hover::before {
+            left: 100%;
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-4px);
+        }
+
+        .btn-rubika {
+            background: linear-gradient(135deg, #2FC878, #1A8C54);
+            color: white;
+            box-shadow: 0 12px 30px rgba(47, 200, 120, 0.3);
+        }
+
+        .btn-rubika:hover {
+            box-shadow: 0 20px 45px rgba(47, 200, 120, 0.5);
+        }
+
+        .btn-bot {
+            background: linear-gradient(135deg, #7C3AED, #06B6D4);
+            color: white;
+            box-shadow: 0 12px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-bot:hover {
+            box-shadow: 0 20px 45px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        /* ============ TOAST ============ */
+        .toast {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10B981;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            z-index: 9999;
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+            animation: toastSlide 0.4s ease;
+        }
+
+        @keyframes toastSlide {
+            from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .toast.fade {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 650px) {
+            .banner {
+                padding: 35px 20px;
+                border-radius: 22px;
+            }
+            .team-name {
+                font-size: 2.2rem;
+            }
+            .logo-container {
+                width: 110px;
+                height: 110px;
+            }
+            .logo-text {
+                font-size: 2.8rem;
+            }
+            .skill-pill {
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .service-card {
+                padding: 16px 12px;
+            }
+            .bots-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            .bot-card {
+                max-width: 100%;
+                width: 100%;
+            }
+            .contact-section {
+                flex-direction: column;
+            }
+            .btn-contact {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ BACKGROUND LAYERS ============ -->
+    <div class="bg-layer">
+        <div class="grid-bg"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div id="starsContainer"></div>
+        <div id="particlesContainer"></div>
+    </div>
+
+    <!-- ============ MAIN BANNER ============ -->
+    <div class="banner-wrapper">
+        <div class="banner">
+            <div class="banner-content">
+
+                <!-- Premium Badge -->
+                <div class="premium-badge">
+                    <span class="dot"></span>
+                    تیم حرفه‌ای گراهام
+                    <span class="dot"></span>
+                </div>
+
+                <!-- Logo -->
+                <div class="logo-container">
+                    <div class="logo-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                    <div class="logo-circle">
+                        <span class="logo-text">G</span>
+                    </div>
+                </div>
+
+                <!-- Team Name -->
+                <h1 class="team-name">تیم گراهام</h1>
+                <p class="team-subtitle">⚡ کدنویسی حرفه‌ای • طراحی سایت • ربات روبیکا ⚡</p>
+
+                <!-- Skills Cloud -->
+                <div class="skills-cloud">
+                    <span class="skill-pill python">🐍 Python</span>
+                    <span class="skill-pill web">🌐 طراحی سایت</span>
+                    <span class="skill-pill bot">🤖 ربات روبیکا</span>
+                    <span class="skill-pill rubika">💬 بات مدیریت گروه</span>
+                    <span class="skill-pill fast">⚡ تحویل سریع</span>
+                    <span class="skill-pill quality">💎 کیفیت تضمینی</span>
+                </div>
+
+                <!-- Services Grid -->
+                <div class="services-grid">
+                    <div class="service-card">
+                        <span class="service-icon">🌐</span>
+                        <div class="service-title">طراحی سایت</div>
+                        <div class="service-desc">سایت‌های شرکتی، فروشگاهی و شخصی با گرافیک بالا</div>
+                    </div>
+                    <div class="service-card">
+                        <span class="service-icon">🤖</span>
+                        <div class="service-title">ربات روبیکا</div>
+                        <div class="service-desc">بات مدیریت گروه، فروش، پشتیبانی و سرگرمی</div>
+                    </div>
+                    <div class="service-card">
+                        <span class="service-icon">💻</span>
+                        <div class="service-title">کدنویسی</div>
+                        <div class="service-desc">پایتون، جنگو، Flask، اسکریپت‌های سفارشی</div>
+                    </div>
+                </div>
+
+                <!-- Price Strip -->
+                <div class="price-strip">
+                    <span class="price-emoji">💰</span>
+                    <span class="price-text">قیمت مناسب و توافقی</span>
+                    <span class="price-highlight">🎯 کیفیت عالی</span>
+                </div>
+
+                <!-- Reviews -->
+                <div class="reviews-strip">
+                    <div class="review-chip">
+                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                        <span>"کارشون فوق‌العاده‌ست"</span>
+                    </div>
+                    <div class="review-chip">
+                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                        <span>"سریع و باکیفیت"</span>
+                    </div>
+                    <div class="review-chip">
+                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                        <span>"قیمت عالی، کار عالی"</span>
+                    </div>
+                </div>
+
+                <!-- Bots Section -->
+                <div class="bots-row">
+                    <a href="https://rubika.ir/GrahamBot" target="_blank" class="bot-card">
+                        <span class="bot-icon">🤖</span>
+                        <div class="bot-name">بات گراهام</div>
+                        <div class="bot-id">@GrahamBot</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 5px;">
+                            بات مدیریت گروه روبیکا
+                        </div>
+                    </a>
+                    <div class="bot-card" onclick="copyText('@admin10blue')" style="cursor: pointer;">
+                        <span class="bot-icon">👤</span>
+                        <div class="bot-name">ادمین پشتیبانی</div>
+                        <div class="bot-id">@admin10blue</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 5px;">
+                            کلیک کن تا آیدی کپی بشه
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Buttons -->
+                <div class="contact-section">
+                    <a href="https://rubika.ir/admin10blue" target="_blank" class="btn-contact btn-rubika">
+                        <span class="btn-icon">💬</span>
+                        ارسال پیام در روبیکا
+                    </a>
+                    <a href="https://rubika.ir/GrahamBot" target="_blank" class="btn-contact btn-bot">
+                        <span class="btn-icon">🤖</span>
+                        بات گراهام در روبیکا
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ CREATE STARS ============
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            const count = 100;
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (1 + Math.random() * 3) + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (2 + Math.random() * 4) + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // ============ CREATE PARTICLES ============
+        function createParticles() {
+            const container = document.getElementById('particlesContainer');
+            const emojis = ['✦', '◆', '◇', '○', '△', '▽', '◈', '⟡', '⬡', '✧'];
+            
+            setInterval(() => {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                p.style.left = Math.random() * 100 + '%';
+                p.style.bottom = '-20px';
+                p.style.fontSize = (0.6 + Math.random() * 1.4) + 'rem';
+                p.style.color = ['#7C3AED', '#06B6D4', '#F43F5E', '#FBBF24', '#4ADE80'][Math.floor(Math.random() * 5)];
+                p.style.animationDuration = (6 + Math.random() * 10) + 's';
+                container.appendChild(p);
+                
+                setTimeout(() => p.remove(), 14000);
+            }, 2000);
+        }
+
+        // ============ COPY TEXT ============
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('✅ آیدی کپی شد: ' + text);
+            }).catch(() => {
+                showToast('📋 ' + text);
+            });
+        }
+
+        // ============ TOAST ============
+        function showToast(message) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('fade');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // ============ INIT ============
+        createStars();
+        createParticles();
+
+        console.log('%c🚀 تیم گراهام %c| کدنویسی • طراحی سایت • ربات روبیکا', 'color: #7C3AED; font-size: 20px; font-weight: bold;', 'color: #06B6D4;');
+        console.log('%c🤖 بات گراهام: @GrahamBot', 'color: #4ADE80; font-size: 14px;');
+        console.log('%c👤 ادمین: @admin10blue', 'color: #FBBF24; font-size: 14px;');
+    </script>
+
+</body>
+</html>
